@@ -40,28 +40,38 @@ Students engaged in prolonged study sessions often experience diminished focus o
 
 ## 🚀 Setup & Installation
 
-1. **Clone the repository:**
+1. **Hardware Preparation:**
+   - Connect all sensors (Ultrasonic, LDR, MPU6050, ZX8020), the buzzer, and the LED strip to your Arduino Uno board.
+   - Connect the Arduino to your computer via USB.
+
+2. **Arduino Setup (Run First!):**
+   - Open the provided `arduino/arduino.ino` file using the Arduino IDE.
+   - Select your correct Board and Port from the Tools menu.
+   - Upload the code to your Arduino board. 
+   - **Crucial:** The Arduino firmware must be actively running on the board before you start the Python backend.
+
+3. **Clone the repository:**
    ```bash
    git clone https://github.com/deepak179-s/BrightTrack.git
    cd BrightTrack
    ```
 
-2. **Install Python Dependencies:**
+4. **Install Python Dependencies:**
    ```bash
    pip install opencv-python face_recognition pyserial numpy pandas matplotlib mediapipe
    ```
 
-3. **Add Known Faces:**
+5. **Add Known Faces:**
    - Place images of the users who will use the system in the `known_faces/` directory.
    - Name the file exactly as you want the greeting to appear (e.g., `Deepak.jpg`).
 
-4. **Configure the Script (`p.py`):**
+6. **Configure the Script (`p.py`):**
    - Update `SERIAL_PORT` to match your Arduino's serial port (e.g., `/dev/cu.usbserial-10`).
-   - Update `EMAIL_SENDER`, `EMAIL_PASSWORD` (use an App Password), and `EMAIL_RECIPIENTS` to configure the automated email reporting to parents.
+   - Update `EMAIL_SENDER` and `EMAIL_PASSWORD` to configure the automated email reporting to parents.
 
 ## 📖 Usage Instructions
 
-1. **Start Up:** Ensure the Arduino is connected and webcam is active, then run:
+1. **Start the System:** Ensure the Arduino is plugged in and running its firmware. Confirm your webcam is active, and then start the Python backend:
    ```bash
    python p.py
    ```
