@@ -1,0 +1,21 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Mac OS files
+.DS_Store
+
+# Virtual environments
+venv/
+env/
+ENV/
+.env
+
+# Installers and heavy files
+Miniforge3-MacOSX-arm64.sh
+*.pdf 
+
+# Output files
+study_log.csv
+daily_study_graph.png
