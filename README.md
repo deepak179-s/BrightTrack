@@ -1,76 +1,81 @@
-# Smart Study Session Monitor
+# BrightTrack: Integrated Smart Study Lamp System
 
-This is a comprehensive, AI-powered patent project designed to monitor, log, and enhance study sessions. It integrates hardware (Arduino sensors and LEDs) with a sophisticated Python backend using OpenCV, face recognition, and hand-gesture tracking.
+**BrightTrack** is an AI-powered, IoT-enabled smart study lamp system designed to enhance student focus, monitor study habits, and provide adaptive lighting. It integrates an Arduino-based hardware network (Ultrasonic, LDR, MPU6050, ZX8020) with a sophisticated Python computer vision backend (OpenCV, MediaPipe, Face Recognition).
 
-## Features
+This project acts as a complete automated monitor for study sessions, providing real-time adaptive lighting, multimodal interaction, automated monitoring, and independent manual control.
 
-- **Automated Face Recognition:** Identifies the user via webcam against known profiles (in `known_faces/`), personalizing the session setup.
-- **Smart Timer & Presence Detection:** The user inputs a study timer. If the Arduino's ultrasonic/PIR sensor detects the user has left the desk, the timer automatically pauses, and resumes when they return.
-- **Intelligent Lighting Control:** Integrates with an Arduino light sensor to automatically turn on a desk LED when the room is dark and the user is present.
-- **Gesture-Controlled Brightness:** Uses MediaPipe hand tracking to allow the user to adjust the LED brightness simply by pinching their thumb and index finger and moving their hand up or down.
-- **Activity Logging & Analytics:** Generates daily study reports (saving a daily graph using Matplotlib) and logs every event in a comprehensive CSV (`study_log.csv`).
-- **Automated Email Reports:** Emails the daily study summary and graph directly to the user when the session ends.
+## 🌟 Key Features
 
-## Prerequisites
+- **Automated Face Recognition:** Identifies the user via webcam and greets them by name on the LCD display.
+- **Smart Timer & Presence Detection:** A study timer pauses automatically if the user leaves the desk (detected via an HC-SR04 Ultrasonic sensor) and alerts on extended absence.
+- **Adaptive Lighting Control:** Integrates an LDR (Light Dependent Resistor) to automatically switch the LED desk lamp on in low light (when the user is present) and off when ambient light is sufficient.
+- **Gesture-Controlled Brightness:** Uses MediaPipe hand tracking so users can adjust LED brightness completely hands-free by pinching and moving their fingers.
+- **Activity & Sleep Monitoring (MPU6050):** Uses an accelerometer/gyroscope to track physical activity. Prolonged inactivity triggers a buzzer alert to prevent the student from falling asleep.
+- **Independent Manual Touch Control:** Features a ZX8020 touch sensor for manual on/off and brightness cycling (100 -> 180 -> 255 -> Off), ensuring fundamental lighting works independently of the AI system.
+- **Activity Logging & Analytics:** Generates daily study reports (saving a daily graph using pandas and matplotlib) and logs every session event into `study_log.csv`.
+- **Automated Email Reports:** Automatically compiles and emails the daily study summary and generated graphs to parents or guardians.
 
-### Hardware Requirements
-- Arduino board connected via Serial (USB). Note: Update `SERIAL_PORT` in the code to match your specific setup (e.g., `/dev/cu.usbserial-10`).
-- Proximity sensor (Ultrasonic/PIR) connected to the Arduino.
-- Light sensor (LDR) connected to the Arduino.
-- Dimmable LED component connected to the Arduino.
-- Webcam for face and gesture recognition.
+## 🛠️ Hardware Requirements
 
-### Software Requirements
+- **Microcontroller:** Arduino Uno (or compatible)
+- **Sensors:**
+  - HC-SR04 Ultrasonic Sensor (Presence detection)
+  - LDR / Photoresistor (Ambient light sensing)
+  - MPU6050 Accelerometer/Gyroscope (Activity/Sleep monitoring)
+  - ZX8020 Touch IC (Independent manual parallel control)
+- **Outputs:**
+  - 12V Dimmable LED Strip
+  - 1602 I2C LCD Display (User interaction & timer)
+  - Piezo Buzzer (Alerts for absence or sleep)
+- **Computer/Vision:** PC with USB Webcam.
+
+## 💻 Software Requirements
+
 - Python 3.x
-- Arduino IDE (for flashing the Arduino component, not included in this repo)
-- C/C++ compiler tools (for `face_recognition` dependencies like `dlib`)
+- **Python Libraries:** `opencv-python`, `face_recognition`, `pyserial`, `numpy`, `pandas`, `matplotlib`, `mediapipe`
+- Arduino IDE (to flash the microcontroller firmware)
 
-### Required Python Libraries
-```bash
-pip install opencv-python face_recognition pyserial numpy pandas matplotlib mediapipe
-```
-
-## Setup & Installation
+## 🚀 Setup & Installation
 
 1. **Clone the repository:**
    ```bash
    git clone <your-repository-url>
-   cd <repository-directory>
+   cd BrightTrack
    ```
 
-2. **Add Known Faces:**
-   - Create a directory named `known_faces/` in the project root if it doesn't exist.
-   - Place images of the users who will use the system in this folder. Name the files with the person's name (e.g., `john_doe.jpg`).
+2. **Install Python Dependencies:**
+   ```bash
+   pip install opencv-python face_recognition pyserial numpy pandas matplotlib mediapipe
+   ```
 
-3. **Configure the Script (`p.py`):**
-   - Update `SERIAL_PORT` to match your Arduino's serial port.
-   - Update `EMAIL_SENDER`, `EMAIL_PASSWORD` (use an app password), and `EMAIL_RECIPIENTS` to configure the reporting feature.
+3. **Add Known Faces:**
+   - Place images of the users who will use the system in the `known_faces/` directory.
+   - Name the file exactly as you want the greeting to appear (e.g., `Deepak.jpg`).
 
-4. **Run the Application:**
+4. **Configure the Script (`p.py`):**
+   - Update `SERIAL_PORT` to match your Arduino's serial port (e.g., `/dev/cu.usbserial-10`).
+   - Update `EMAIL_SENDER`, `EMAIL_PASSWORD` (use an App Password), and `EMAIL_RECIPIENTS` to configure the automated email reporting to parents.
+
+5. **Run the Application:**
    ```bash
    python p.py
    ```
 
-## Usage Instructions
+## 📖 Usage Instructions
 
-1. **Start the Script:** Run `python p.py`. Ensure your Arduino is connected and your webcam is active.
-2. **Face Identification:** Look into the webcam. The system will greet you by name if recognized and prompt you to set a study timer in minutes.
+1. **Start Up:** Ensure the Arduino is connected and webcam is active, then run `p.py`.
+2. **Face Identification:** Look at the webcam. The LCD will greet you and prompt you to set a study timer (in minutes) via the terminal.
 3. **Session Monitoring:**
-   - **Leave tracking:** If you walk away, the Arduino detects your absence and pauses the timer. It resumes upon your return.
-   - **Auto-Lighting:** If the room gets dark, the LED will automatically turn on.
+   - Walk away, and the system pauses your timer and eventually triggers an alert.
+   - Sit still or fall asleep, and the MPU6050 triggers a wake-up buzzer.
+   - If the room gets dark, the LED automatically turns on.
 4. **Gesture Controls:**
-   - When the LED is on, hold your thumb and index finger close together (pinch) in front of the camera.
-   - Move your pinched fingers up to increase brightness, or down to decrease it.
-   - Release the pinch to lock in the brightness.
+   - Pinch your thumb and index finger in view of the camera.
+   - Move your hand up/down to adjust the LED brightness. Release the pinch to lock the brightness.
 5. **End Session:**
-   - Press the `q` key on the active OpenCV video window to exit.
-   - The system will safely wind down, turn off the LED, save your session log/graph, and send an email report to the configured addresses.
+   - Press the `q` key on the OpenCV video window to exit.
+   - The system turns off the LED, generates a study graph, and emails the complete report.
 
-## Output Files
+## 📝 License / Disclaimer
 
-- `study_log.csv`: A continuous log of all your sessions, pauses, and returns.
-- `daily_study_graph.png`: A bar chart tracking approximate daily study hours, generated per user per day.
-
-## Disclaimer
-
-This is a patent-pending project showcasing the integration of physical sensor networks with computer vision and machine learning for smart environment optimization.
+This repository contains the software systems for the **BrightTrack** patent project. All components and integration methodologies are part of an Invention Disclosure framework.
